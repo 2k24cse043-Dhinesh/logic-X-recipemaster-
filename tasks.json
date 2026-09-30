@@ -1,0 +1,101 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Run RecipeMaster dev stack",
+			"type": "shell",
+			"command": "npm run dev",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Check port 5000 owner",
+			"type": "shell",
+			"command": "cmd /c \"for /f \\\"tokens=5\\\" %a in ('netstat -ano ^| findstr :5000') do @echo %a\"",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Check port 5000 owner",
+			"type": "shell",
+			"command": "cmd /c \"netstat -ano | findstr :5000\"",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Generate first five dish images",
+			"type": "shell",
+			"command": "Set-Location backend; node scripts/generate-premium-dish-art-all.js --limit=5",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Add collage dish photos",
+			"type": "shell",
+			"command": "Set-Location backend; node scripts/add-collage-dish-photos.js",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Check LAN IPv4",
+			"type": "shell",
+			"command": "Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.IPAddress -notlike '127.*' -and $_.IPAddress -notlike '169.254.*' } | Select-Object InterfaceAlias,IPAddress | Format-Table -AutoSize",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Inspect RecipeMaster API listener",
+			"type": "shell",
+			"command": "$listener = Get-NetTCPConnection -LocalPort 5001 -State Listen -ErrorAction SilentlyContinue; $listener | Select-Object LocalAddress,LocalPort,OwningProcess | Format-Table -AutoSize; $listener | Select-Object -ExpandProperty OwningProcess -Unique | ForEach-Object { Get-CimInstance Win32_Process -Filter \"ProcessId = $_\" | Select-Object ProcessId,Name,CommandLine | Format-List }",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Verify API process",
+			"type": "shell",
+			"command": "Get-Process -Id 26472 -ErrorAction Stop | Select-Object Id,ProcessName,Path | Format-List",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Restart RecipeMaster API for phone access",
+			"type": "shell",
+			"command": "$listener = Get-NetTCPConnection -LocalPort 5001 -State Listen -ErrorAction SilentlyContinue; $listener | Select-Object -ExpandProperty OwningProcess -Unique | ForEach-Object { Stop-Process -Id $_ -Force }; Set-Location backend; node src/server.js",
+			"isBackground": true,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Run backend auth tests",
+			"type": "shell",
+			"command": "npm test --workspace backend",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "Build frontend after auth changes",
+			"type": "shell",
+			"command": "npm run build --workspace frontend",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Restart API with verification removed",
+			"type": "shell",
+			"command": "Stop-Process -Id 3224 -Force; Set-Location backend; node --watch src/server.js",
+			"isBackground": true,
+			"problemMatcher": [],
+			"group": "build"
+		}
+	]
+}

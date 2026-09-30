@@ -1,0 +1,33 @@
+{
+  "name": "recipemaster-backend",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js",
+    "seed": "node scripts/seed.js",
+    "seed:cuisines": "node scripts/seed-cuisines.js",
+    "seed:dishes": "node scripts/seed-dish-catalog.js",
+    "populate:indian-dishes": "node scripts/populate-indian-dish-content.js",
+    "populate:indian-photos": "node scripts/populate-indian-dish-photos.js",
+    "verify:cuisines": "node scripts/verify-cuisines.js",
+    "check": "node --check src/server.js && node --check src/app.js && node --check src/services/authService.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "argon2": "^0.45.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^8.9.5",
+    "nodemailer": "^10.0.12",
+    "pino": "^9.6.0",
+    "pino-http": "^10.4.0",
+    "zod": "^3.24.1"
+  }
+}
